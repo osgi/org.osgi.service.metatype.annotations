@@ -1,0 +1,10 @@
+# Set javac settings from JDT prefs
+
+Bundle-Description			= Metatype Annotations Test Bundle
+
+-privatepackage 			= ${p}.*
+
+-dsannotations: ${p}.*
+-metatypeannotations: ${p}.*
+
+p: org.osgi.impl.bundle.metatype.annotations
