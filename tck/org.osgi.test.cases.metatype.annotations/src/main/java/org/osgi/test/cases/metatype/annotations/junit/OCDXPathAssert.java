@@ -18,11 +18,11 @@
 
 package org.osgi.test.cases.metatype.annotations.junit;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.osgi.test.support.string.Strings;
-import org.osgi.test.support.xpath.AbstractXPathAssert;
+import org.osgi.test.assertj.xml.AbstractXPathAssert;
 import org.w3c.dom.Node;
 
 public class OCDXPathAssert extends AbstractXPathAssert<OCDXPathAssert,OCD> {
@@ -57,7 +57,7 @@ public class OCDXPathAssert extends AbstractXPathAssert<OCDXPathAssert,OCD> {
 			Assertions.assertThat(result)
 					.as("%s/@default for node %s", expr, actual.getId())
 					.isNotNull();
-			List<String> split = Strings.split(result.getNodeValue());
+			List<String> split = Arrays.asList(result.getNodeValue().trim().split("\\s*,\\s*"));
 			Assertions.assertThat(split)
 					.as("%s/@default value for node %s", expr, actual.getId())
 					.containsExactly(values);

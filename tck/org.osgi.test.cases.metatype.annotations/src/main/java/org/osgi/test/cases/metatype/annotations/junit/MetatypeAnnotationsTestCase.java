@@ -18,12 +18,12 @@
 
 package org.osgi.test.cases.metatype.annotations.junit;
 
+import static org.osgi.test.assertj.xml.XPathAssert.assertThat;
 import static org.osgi.test.cases.metatype.annotations.junit.OCDXPathAssert.assertThat;
-import static org.osgi.test.support.xpath.XPathAssert.assertThat;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author $Id$
@@ -32,7 +32,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testConfigurationPropertyType() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasValue("../@localization", "OSGI-INF/l10n/" + getSelf(ocd))
@@ -93,7 +93,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testSubInterface() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasValue("@description", "")
@@ -155,7 +155,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testNameMapping() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasValue("@description", "")
@@ -173,7 +173,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testNoDefaults() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.doesNotContainText(".")
@@ -212,7 +212,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testDesignateConfig() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.doesNotContainText(".")
@@ -228,7 +228,7 @@ public class MetatypeAnnotationsTestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testDesignateFactoryConfig() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.doesNotContainText(".")

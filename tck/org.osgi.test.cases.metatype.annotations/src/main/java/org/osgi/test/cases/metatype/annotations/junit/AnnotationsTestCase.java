@@ -39,12 +39,13 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
 
-import org.junit.Assert;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.metatype.MetaTypeService;
-import org.osgi.test.support.junit4.AbstractOSGiTestCase;
-import org.osgi.test.support.xpath.BaseNamespaceContext;
+import org.osgi.test.assertj.xml.SimpleNamespaceContext;
+import org.osgi.test.common.annotation.InjectBundleContext;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -54,7 +55,10 @@ import org.w3c.dom.NodeList;
 /**
  * @author $Id$
  */
-public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
+public abstract class AnnotationsTestCase {
+	@InjectBundleContext
+	protected BundleContext			bundleContext;
+	protected String				testMethodName;
 	public static final String		xmlns_metatype120	= "http://www.osgi.org/xmlns/metatype/v1.2.0";
 	public static final String		xmlns_metatype130	= "http://www.osgi.org/xmlns/metatype/v1.3.0";
 	public static final String		xmlns_metatype140	= "http://www.osgi.org/xmlns/metatype/v1.4.0";
@@ -63,10 +67,15 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 	protected Map<String,Designate>	designatePids;
 	protected Map<String,Designate>	designateFactoryPids;
 
+	@BeforeEach
+	void testMethodName(TestInfo testInfo) {
+		testMethodName = testInfo.getTestMethod().get().getName();
+	}
+
 	/**
 	 * @throws Exception
 	 */
-	@Before
+	@BeforeEach
 	public void loadMetatypeResources() throws Exception {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setNamespaceAware(true);
@@ -80,12 +89,12 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 		designateFactoryPids = new HashMap<String,Designate>();
 
 		final String propName = "org.osgi.test.cases.metatype.annotations.bundle.symbolic.name";
-		String bsn = getProperty(propName);
+		String bsn = bundleContext.getProperty(propName);
 		assertThat(bsn).as(
 				"The system property \"%s\" must be set to the Bundle Symbolic Name of the bundle processed by the Metatype Annotations tool.",
 				propName).isNotNull();
 		Bundle impl = null;
-		for (Bundle b : getContext().getBundles()) {
+		for (Bundle b : bundleContext.getBundles()) {
 			if (bsn.equals(b.getSymbolicName())) {
 				impl = b;
 				break;
@@ -97,10 +106,10 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 
 		Enumeration<URL> documents = impl.findEntries(
 				MetaTypeService.METATYPE_DOCUMENTS_LOCATION, "*.xml", false);
-		Assert.assertTrue(
-				MetaTypeService.METATYPE_DOCUMENTS_LOCATION
-						+ " folder has no metatype documents",
-				documents.hasMoreElements());
+		assertThat(documents.hasMoreElements())
+				.as(MetaTypeService.METATYPE_DOCUMENTS_LOCATION
+						+ " folder has no metatype documents")
+				.isTrue();
 		XPathExpression expr = xpath.compile("//namespace::*[.='"
 				+ xmlns_metatype120 + "' or .='" + xmlns_metatype130
 				+ "' or .='" + xmlns_metatype140 + "']");
@@ -113,7 +122,7 @@ public abstract class AnnotationsTestCase extends AbstractOSGiTestCase {
 					XPathConstants.NODESET);
 			for (int i = 0; i < namespaces.getLength(); i++) {
 				Attr namespace = (Attr) namespaces.item(i);
-				BaseNamespaceContext context = new BaseNamespaceContext(
+				SimpleNamespaceContext context = new SimpleNamespaceContext(
 						namespace);
 				xpath.setNamespaceContext(context);
 				NodeList elements = (NodeList) xpath.evaluate(

@@ -20,21 +20,21 @@ package org.osgi.test.cases.metatype.annotations.junit;
 
 import static org.osgi.test.cases.metatype.annotations.junit.AnnotationsTestCase.xmlns_metatype120;
 
-import org.osgi.test.support.xpath.BaseElement;
-import org.osgi.test.support.xpath.BaseNamespaceContext;
+import org.osgi.test.assertj.xml.SimpleNamespaceContext;
+import org.osgi.test.assertj.xml.XmlElement;
 import org.w3c.dom.Element;
 
 /**
  * @author $Id$
  */
-public class OCD extends BaseElement {
+public class OCD extends XmlElement {
 
 	/**
 	 * @param id
 	 * @param context
 	 * @param ocd
 	 */
-	public OCD(String id, BaseNamespaceContext context, Element ocd) {
+	public OCD(String id, SimpleNamespaceContext context, Element ocd) {
 		super(id, context, ocd);
 	}
 
