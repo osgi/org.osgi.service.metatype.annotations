@@ -18,10 +18,10 @@
 
 package org.osgi.test.cases.metatype.annotations.junit;
 
+import static org.osgi.test.assertj.xml.XPathAssert.assertThat;
 import static org.osgi.test.cases.metatype.annotations.junit.OCDXPathAssert.assertThat;
-import static org.osgi.test.support.xpath.XPathAssert.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author $Id$
@@ -30,7 +30,7 @@ public class MetatypeAnnotations14TestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testNameMapping14() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasNamespace(xmlns_metatype140)
@@ -41,7 +41,7 @@ public class MetatypeAnnotations14TestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testSingleElement() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasNamespace(xmlns_metatype140)
@@ -52,7 +52,7 @@ public class MetatypeAnnotations14TestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testPidDollar() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasValue("@description", "")
@@ -68,7 +68,7 @@ public class MetatypeAnnotations14TestCase extends AnnotationsTestCase {
 
 	@Test
 	public void testFactoryPidDollar() throws Exception {
-		String name = testName.getMethodName();
+		String name = testMethodName;
 		OCD ocd = ocds.get(name);
 		assertThat(ocd).as("OCD %s", name)
 				.hasValue("@description", "")
